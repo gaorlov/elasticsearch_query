@@ -1,8 +1,8 @@
 module ElasticsearchQuery
   class Query
     def initialize( params )
-      if params.respond_to? :with_indifferent_acess
-        @params = params.with_indifferent_acess
+      if params.respond_to? :with_indifferent_access
+        @params = params.with_indifferent_access
       else
         @params = params
       end

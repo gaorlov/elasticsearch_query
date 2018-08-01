@@ -44,10 +44,19 @@ class Params
   end
 
   def with_indifferent_access
+    self
   end
 
   def [](key)
     @value[ key.to_s ] || @value[ key.to_sym ]
+  end
+
+  def fetch( key, default = nil )
+     @value[ key.to_s ] || @value[ key.to_sym ] || default
+  end
+
+  def dig( *keys )
+    @value.dig *keys
   end
 end
 

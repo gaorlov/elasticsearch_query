@@ -1,6 +1,8 @@
 # ElasticsearchQuery
 
 [![Build Status](https://travis-ci.org/gaorlov/elasticsearch_query.svg?branch=master)](https://travis-ci.org/gaorlov/elasticsearch_query)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/0d9870cdf0ef6e5a659f/test_coverage)](https://codeclimate.com/github/gaorlov/elasticsearch_query/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/0d9870cdf0ef6e5a659f/maintainability)](https://codeclimate.com/github/gaorlov/elasticsearch_query/maintainability)
 
 `ElasticsearchQuery` is a tranformer from [`JSONAPI`](http://jsonapi.org) style params hash into an [`Elasticseatch-ruby`](https://github.com/elastic/elasticsearch-ruby)-compatible object that can easily be fed into `client.search`
 

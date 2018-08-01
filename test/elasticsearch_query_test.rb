@@ -15,6 +15,11 @@ class ElasticsearchQueryTest < Minitest::Test
     assert_equal Hash, q.to_hash.class
   end
 
+  def test_indifferent_acess
+    q = ElasticsearchQuery.from_params( Params.new( { "filter" => { "key" => "value" } } ) )
+    assert_equal( { query: { match: { "key" => "value" } }, size: 20, from: 0 }, q.to_hash )
+  end
+
   def test_single_match_filter
     q = ElasticsearchQuery.from_params( { filter: { key: "value" } } )
     assert_equal( { query: { match: { key: "value" } }, size: 20, from: 0 }, q.to_hash )
