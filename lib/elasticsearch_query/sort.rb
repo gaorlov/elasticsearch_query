@@ -1,8 +1,7 @@
 module ElasticsearchQuery
   class Sort
-    def initialize( params = {}, default = "" )
+    def initialize( params = {} )
       @params  = params
-      @default = default
     end
 
     def to_hash
@@ -18,11 +17,11 @@ module ElasticsearchQuery
 
     def sorts
       @sorts ||= begin
-        sorts = @params.fetch( :sort, @default ).split(',')
+        sorts = @params.fetch( :sort, "" ).split(',')
 
         sorts.each_with_object([]) do |field, arr|
           desc, field   = field.match(/^([-_])?(\w+)$/i)[1..2]
-          arr << { field => desc&.empty? ? :asc : :desc }
+          arr << { field => desc ? :desc : :asc }
         end
       end
     end

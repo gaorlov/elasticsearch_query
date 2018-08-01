@@ -28,7 +28,7 @@ Using the gem is pretty strightforward. You have to set up 2 things: the paginat
 ```ruby
 {
   filter: { key: :value },
-  sort: :sort_value
+  sort: "sort,-other_sort"
 }.merge( your_pagination_format_here )
 ```
 
