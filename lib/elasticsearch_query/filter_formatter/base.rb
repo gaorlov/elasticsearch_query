@@ -5,10 +5,6 @@ module ElasticsearchQuery
         @name  = name
         @value = value
       end
-
-      def to_hash
-        raise NotImplementedError
-      end
     end
   end
 end
