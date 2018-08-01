@@ -10,22 +10,17 @@ class DummyPaginator
     @params = params
   end
 
-  def size
-    @size ||= ( @params.dig( :page, :size ) || 20 ).to_i
+  def limit
+    @limit ||= ( @params.dig( :page, :limit ) || 20 ).to_i
   end
 
-  def number
-    @number ||= ( @params.dig( :page, :number ) || 1 ).to_i
-  end
-
-  # offset
-  def from
-    ( number - 1 ) * size
+  def offset
+    @offset ||= ( @params.dig( :page, :offset ) || 0 ).to_i
   end
 
   def to_hash
-    {  size: size,
-       from: from }
+    {  size: limit,
+       from: offset }
   end
 end
 

@@ -75,7 +75,7 @@ class MyPaginator
 end
 ```
 
-What the params look like and how you extract the page size and offset(`from`) are up to you. 
+What the params look like and how you extract the page size(`size`) and offset(`from`) are up to you. 
 
 #### RangeFormatter
 

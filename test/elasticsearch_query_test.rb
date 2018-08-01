@@ -42,7 +42,7 @@ class ElasticsearchQueryTest < Minitest::Test
     assert_equal( { query: { bool: { must: [ { match: { key: "value" } }, { range: { other_key: { gte: "beginning", lt: "end" } } } ] } }, size: 20, from: 0 }, q.to_hash )
   end
 
-  def test_sort
+  def test_desc_sort
     q = ElasticsearchQuery.from_params( { filter: { key: "value" }, sort: "some_field" } )
     assert_equal( { query: { match: { key: "value" } }, sort: { "some_field" => :asc }, size: 20, from: 0 }, q.to_hash )
   end
@@ -55,6 +55,11 @@ class ElasticsearchQueryTest < Minitest::Test
   def test_compound_sort
     q = ElasticsearchQuery.from_params( { filter: { key: "value" }, sort: "field,-other_field" } )
     assert_equal( { query: { match: { key: "value" } }, sort: [ { "field" => :asc }, { "other_field" => :desc } ], size: 20, from: 0 }, q.to_hash )
+  end
+
+  def test_pagination
+    q = ElasticsearchQuery.from_params( { page: { limit: 150, offset: 15 } } )
+    assert_equal( { query: { bool: { must: [ ] } }, size: 150, from: 15 }, q.to_hash )
   end
 
   def test_count_query_is_only_query
