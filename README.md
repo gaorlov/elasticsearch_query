@@ -1,5 +1,7 @@
 # ElasticsearchQuery
 
+[![Build Status](https://travis-ci.org/gaorlov/elasticsearch_query.svg?branch=master)](https://travis-ci.org/gaorlov/elasticsearch_query)
+
 `ElasticsearchQuery` is a tranformer from [`JSONAPI`](http://jsonapi.org) style params hash into an [`Elasticseatch-ruby`](https://github.com/elastic/elasticsearch-ruby)-compatible object that can easily be fed into `client.search`
 
 *Note*: This gem was written for use with a [modified](https://github.com/tiagopog/jsonapi-utils/pull/90) [`JSONAPI::Utils`](https://github.com/tiagopog/jsonapi-utils/) and uses several concepts from it (Paginator interface, param structure), but has no hard dependencies.
