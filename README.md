@@ -1,8 +1,8 @@
 # ElasticsearchQuery
 
-`ElastocsearchQuery` is a tranformer from [`JSONAPI`](http://jsonapi.org) style params hash into an [`Elasticseatch-ruby`](https://github.com/elastic/elasticsearch-ruby)-compatible object that can easily be fed into `client.search`
+`ElasticsearchQuery` is a tranformer from [`JSONAPI`](http://jsonapi.org) style params hash into an [`Elasticseatch-ruby`](https://github.com/elastic/elasticsearch-ruby)-compatible object that can easily be fed into `client.search`
 
-*Note*: This gem was written for use with a [modified](https://github.com/tiagopog/jsonapi-utils/pull/90) [`JSONAPI::Utils`](https://github.com/tiagopog/jsonapi-utils/) and uses several constructs from it (Paginator, param structure).
+*Note*: This gem was written for use with a [modified](https://github.com/tiagopog/jsonapi-utils/pull/90) [`JSONAPI::Utils`](https://github.com/tiagopog/jsonapi-utils/) and uses several concepts from it (Paginator interface, param structure), but has no hard dependencies.
 
 ## Installation
 
@@ -22,7 +22,15 @@ Or install it yourself as:
 
 ## Usage
 
-Using the gem is pretty strightforward. You have to set up 2 things: the paginator, and the range parser (if your api accepts range filters)
+Using the gem is pretty strightforward. You have to set up 2 things: the paginator, and the range parser (if your API accepts range filters)
+
+*NOTE*: This gem assumes that params come in the form of
+```ruby
+{
+  filter: { key: :value },
+  sort: :sort_value
+}.merge( your_pagination_format_here )
+```
 
 ### Example
 
@@ -42,10 +50,51 @@ end
 
 As mentioned earlier the config is assignment of a paginator class (required) and a range formatter class (optional)
 
+```ruby
+# in your config/initializers/elasticsearch_query.rb
+ElasticsearchQuery::Query.paginator_class = MyPaginator
+ElasticsearchQuery::FilterFormatter::Range.parser = MyRangeParser
+```
+
 #### Paginator
 
+Most APIs want paged results. But since your interface is your own and not super relevant to how the query is contructed, it needs to duck the following type:
+
+```ruby
+class MyPaginator
+  def initialize( params )
+    @params = params
+  end
+
+  def to_hash
+    { size: size,
+      from: from }
+  end
+end
+```
+
+What the params look like and how you extract the page size and offset(`from`) are up to you. 
 
 #### RangeFormatter
+
+If your API has values that are filterable by range (e.g. `created_at`) `ElasticsearchQuery` can supprt those values; all you have to do is set up how to parse the parameter.
+
+```ruby
+class MyRangeParser
+  def initialize( value )
+    @value = value
+  end
+
+  # if your values come in as beginning-to-end for some reason
+  def parse
+    value.split "-to-"
+  end
+end
+```
+
+The result of `MyRangeParser#parse` method **MUST** respond to `#first` and `#last`, so things like `Array` and `Range` are great things to return, but if yoiu want to roll your own, have at it.
+
+*Note*: This gem assumes that infinity and negative infinity are represented as `inf` and `neginf`. 
 
 ## Development
 
