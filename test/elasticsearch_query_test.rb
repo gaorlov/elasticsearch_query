@@ -25,6 +25,11 @@ class ElasticsearchQueryTest < Minitest::Test
     assert_equal( { query: { match: { key: "value" } }, size: 20, from: 0 }, q.to_hash )
   end
 
+  def test_array_filter
+    q = ElasticsearchQuery.from_params( { filter: { key: "value1,value2" } } )
+    assert_equal( { query: { match: { key: ["value1", "value2"] } }, size: 20, from: 0 }, q.to_hash )
+  end
+
   def test_multiple_match_filters
     q = ElasticsearchQuery.from_params( { filter: { key: "value", other_key: "other_value" } } )
     assert_equal( { query: { bool: { must: [ { match: { key: "value" } }, { match: { other_key: "other_value" } } ] } }, size: 20, from: 0 }, q.to_hash )
