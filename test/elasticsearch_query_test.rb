@@ -42,9 +42,18 @@ class ElasticsearchQueryTest < Minitest::Test
                                              { range: { from: { gte: "beginning" } } } ] } }, size: 20, from: 0 }, q.to_hash )
   end
 
+  def test_custom_filter
+    q = ElasticsearchQuery.from_params( { filter: { key: { exists: { field: :key } } } } )
+    assert_equal( { query: { exists: { field: :key } }, size: 20, from: 0 }, q.to_hash )
+  end
+
   def test_mixed_filters
-    q = ElasticsearchQuery.from_params( { filter: { key: "value", other_key: "beginning..end" } } )
-    assert_equal( { query: { bool: { must: [ { match: { key: "value" } }, { range: { other_key: { gte: "beginning", lt: "end" } } } ] } }, size: 20, from: 0 }, q.to_hash )
+    q = ElasticsearchQuery.from_params( { filter: { key: "value",
+                                                    other_key: "beginning..end",
+                                                    third_key: { exists: { field: :third_key } } } } )
+    assert_equal( { query: { bool: { must: [ { match: { key: "value" } },
+                                             { range: { other_key: { gte: "beginning", lt: "end" } } },
+                                             { exists: { field: :third_key } } ] } }, size: 20, from: 0 }, q.to_hash )
   end
 
   def test_desc_sort
