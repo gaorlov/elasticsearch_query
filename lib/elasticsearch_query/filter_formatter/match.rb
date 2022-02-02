@@ -2,7 +2,11 @@ module ElasticsearchQuery
   module FilterFormatter
     class Match < Base
       def to_hash
-        { match: { @name => value } }
+        if array?
+          { terms: { @name => value } }
+        else
+          { match: { @name => value } }
+        end
       end
 
       private

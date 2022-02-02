@@ -27,7 +27,7 @@ class ElasticsearchQueryTest < Minitest::Test
 
   def test_array_filter
     q = ElasticsearchQuery.from_params( { filter: { key: "value1,value2" } } )
-    assert_equal( { query: { match: { key: ["value1", "value2"] } }, size: 20, from: 0 }, q.to_hash )
+    assert_equal( { query: { terms: { key: ["value1", "value2"] } }, size: 20, from: 0 }, q.to_hash )
   end
 
   def test_multiple_match_filters
@@ -65,7 +65,7 @@ class ElasticsearchQueryTest < Minitest::Test
     q = ElasticsearchQuery.from_params( { filter: { key: "value" }, sort: "some_field" } )
     assert_equal( { query: { match: { key: "value" } }, sort: { "some_field" => :asc }, size: 20, from: 0 }, q.to_hash )
   end
-  
+
   def test_asc_sort
     q = ElasticsearchQuery.from_params( { filter: { key: "value" }, sort: "-some_field" } )
     assert_equal( { query: { match: { key: "value" } }, sort: { "some_field" => :desc }, size: 20, from: 0 }, q.to_hash )
